@@ -217,7 +217,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - Рецепты
-  /api/recipes/download_shopping_cart/:
+  /api/recipes/download_for_shoping/:
     get:
       security:
         - Token: [ ]

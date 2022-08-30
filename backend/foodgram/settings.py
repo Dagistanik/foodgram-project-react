@@ -3,6 +3,10 @@ from pathlib import Path
 
 import environ
 
+ONE = 1
+
+ZERO = 0
+
 DEBUG = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent

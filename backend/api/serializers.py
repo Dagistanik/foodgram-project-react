@@ -5,6 +5,7 @@ from rest_framework import serializers
 from api.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
 from users.serializers import CustomUserSerializer
+from foodgram.settings import ZERO
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -38,8 +39,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         source='ingredientamount_set',
         many=True,
     )
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField(method_name = "get_is_favorited")
+    is_in_shopping_cart = serializers.SerializerMethodField(method_name = "get_is_in_shopping_cart")
 
     class Meta:
         model = Recipe
@@ -82,7 +83,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                     {'ingredients': 'Ингредиент уже добавлен'}
                 )
             ingredient_list.append(ingredient)
-            if int(ingredient_item.get('amount')) <= 0:
+            if int(ingredient_item.get('amount')) <= ZERO:
                 raise serializers.ValidationError(
                     {'ingredients': 'количества слишком мало '}
                 )
@@ -117,7 +118,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         instance.ingredients.clear()
         instance.tags.set(tags_data)
-        IngredientAmount.objects.filter(recipe=instance).delete()
+        IngredientAmount.objects.filter(recipe=instance).delete()        
         self.create_ingredients(ingredients_data, instance)
         return instance
 
@@ -132,8 +133,8 @@ class RecipeSerializerRead(serializers.ModelSerializer):
         source='ingredientamount_set',
         many=True,
     )
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField(methor_name = "get_is_favorited")
+    is_in_shopping_cart = serializers.SerializerMethodField(methor_name = "get_is_in_shopping_cart")
 
     class Meta:
         model = Recipe
@@ -173,9 +174,9 @@ class CropRecipeSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(method_name = "get_is_subscribed")
+    recipes = serializers.SerializerMethodField(method_name = "get_recipes")
+    recipes_count = serializers.SerializerMethodField(method_name = "get_recipes_count")
 
     id = serializers.ReadOnlyField(source='author.id')
     email = serializers.ReadOnlyField(source='author.email')

@@ -2,6 +2,8 @@ from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 
+from foodgram.settings import ONE
+
 User = get_user_model()
 
 
@@ -80,7 +82,7 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         validators=(
             validators.MinValueValidator(
-                1, message='Минимальное время приготовления 1 минута'
+                ONE, message='Минимальное время приготовления 1 минута'
             ),
         ),
         verbose_name='Время приготовления',
@@ -106,7 +108,7 @@ class IngredientAmount(models.Model):
     amount = models.PositiveSmallIntegerField(
         validators=(
             validators.MinValueValidator(
-                1, message='Минимальное количество ингредиентов 1'
+                ONE, message='Минимальное количество ингредиентов 1'
             ),
         ),
         verbose_name='Количество',

@@ -15,6 +15,10 @@ from api.permissions import IsAdminOrReadOnly, IsOwnerOrReadOnly
 from api.serializers import (CropRecipeSerializer, IngredientSerializer,
                              RecipeSerializer, RecipeSerializerRead,
                              TagSerializer)
+from foodgram.settings import FILENAME
+
+
+CONTENT_TYPE = 'Content-Type: text/plain'
 
 
 class TagViewSet(ReadOnlyModelViewSet):
@@ -76,10 +80,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 + f'{ing["amount_sum"]} {ing["unit"]}\n'
             )
         response = HttpResponse(
-            shop_list, content_type='text.txt; charset=utf-8'
+            shop_list, content_type = CONTENT_TYPE
         )
 
-        response['Content-Disposition'] = 'attachment; filename=shop_list.txt'
+        response['Content-Disposition'] = FILENAME
         return response
 
     def delete_object(self, model, user, pk):

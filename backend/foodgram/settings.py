@@ -7,6 +7,8 @@ ONE = 1
 
 ZERO = 0
 
+FILENAME = 'attachment; filename=shop_list.txt'
+
 DEBUG = True
 
 BASE_DIR = Path(__file__).resolve().parent.parent

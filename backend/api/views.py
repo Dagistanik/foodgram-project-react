@@ -80,7 +80,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 + f'{ing["amount_sum"]} {ing["unit"]}\n'
             )
         response = HttpResponse(
-            shop_list, content_type = CONTENT_TYPE
+            shop_list, content_type=CONTENT_TYPE
         )
 
         response['Content-Disposition'] = FILENAME

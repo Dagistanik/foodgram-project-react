@@ -89,6 +89,7 @@ class Recipe(models.Model):
     class Meta:
         ordering = ('-id',)
         verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
 
 
 class IngredientAmount(models.Model):
@@ -139,6 +140,7 @@ class Favorite(models.Model):
     class Meta:
         ordering = ('-id',)
         verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
@@ -164,6 +166,7 @@ class Cart(models.Model):
     class Meta:
         ordering = ('-id',)
         verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
         constraints = [
             models.UniqueConstraint(
                 fields=['user', 'recipe'], name='unique cart user'

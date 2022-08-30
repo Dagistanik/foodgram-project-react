@@ -33,7 +33,6 @@ class IngrViewSet(ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
     pagination_class = LimitPageNumberPagination
     filter_class = TagAuthorFilter
     permission_classes = [IsOwnerOrReadOnly]

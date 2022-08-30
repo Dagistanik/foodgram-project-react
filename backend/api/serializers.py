@@ -39,8 +39,10 @@ class RecipeSerializer(serializers.ModelSerializer):
         source='ingredientamount_set',
         many=True,
     )
-    is_favorited = serializers.SerializerMethodField(method_name = "get_is_favorited")
-    is_in_shopping_cart = serializers.SerializerMethodField(method_name = "get_is_in_shopping_cart")
+    is_favorited = serializers.SerializerMethodField(
+        method_name="get_is_favorited")
+    is_in_shopping_cart = serializers.SerializerMethodField(
+        method_name="get_is_in_shopping_cart")
 
     class Meta:
         model = Recipe
@@ -118,7 +120,7 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         instance.ingredients.clear()
         instance.tags.set(tags_data)
-        IngredientAmount.objects.filter(recipe=instance).delete()        
+        IngredientAmount.objects.filter(recipe=instance).delete()
         self.create_ingredients(ingredients_data, instance)
         return instance
 
@@ -133,8 +135,10 @@ class RecipeSerializerRead(serializers.ModelSerializer):
         source='ingredientamount_set',
         many=True,
     )
-    is_favorited = serializers.SerializerMethodField(methor_name = "get_is_favorited")
-    is_in_shopping_cart = serializers.SerializerMethodField(methor_name = "get_is_in_shopping_cart")
+    is_favorited = serializers.SerializerMethodField(
+        methor_name="get_is_favorited")
+    is_in_shopping_cart = serializers.SerializerMethodField(
+        methor_name="get_is_in_shopping_cart")
 
     class Meta:
         model = Recipe
@@ -174,9 +178,11 @@ class CropRecipeSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField(method_name = "get_is_subscribed")
-    recipes = serializers.SerializerMethodField(method_name = "get_recipes")
-    recipes_count = serializers.SerializerMethodField(method_name = "get_recipes_count")
+    is_subscribed = serializers.SerializerMethodField(
+        method_name="get_is_subscribed")
+    recipes = serializers.SerializerMethodField(method_name="get_recipes")
+    recipes_count = serializers.SerializerMethodField(
+        method_name="get_recipes_count")
 
     id = serializers.ReadOnlyField(source='author.id')
     email = serializers.ReadOnlyField(source='author.email')

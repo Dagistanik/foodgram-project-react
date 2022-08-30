@@ -15,7 +15,7 @@ services:
       - ./.env
 
   backend:
-    image: chp13/foodgram:latest
+    image: dagistanik/foodgram:latest
     restart: always
     volumes:
       - static_value:/app/static_backend/
@@ -27,7 +27,7 @@ services:
       - ./.env
 
   frontend:
-    image: chp13/foodgram_front:latest
+    image: dagistanik/foodgram_front:latest
     volumes:
       - ../frontend/:/app/result_build/
       - static_value:/var/html/static/

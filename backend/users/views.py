@@ -24,8 +24,8 @@ class CustomUserViewSet(UserViewSet):
         user = request.user
         author = get_object_or_404(User, id=id)
         serializer = FollowSerializer(
-            data = {'author': author.id, 'user': request.user.id},
-            context = {
+            data={'author': author.id, 'user': request.user.id},
+            context={
                 'request': request,
             }
         )

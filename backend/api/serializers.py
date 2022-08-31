@@ -1,4 +1,3 @@
-from msilib.schema import Class
 from django.shortcuts import get_object_or_404
 from backend.api.models import Cart, Favorite
 from drf_extra_fields.fields import Base64ImageField
@@ -239,7 +238,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_recipes_count(self, obj):
         return obj.author.recipies.count()
-    
+
     def validate(self, data):
         author = self.initial_data.get('author')
         user = self.context.get('request').user
@@ -247,24 +246,24 @@ class FollowSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 {'errors': 'Вы не можете отписываться от самого себя'}
             )
-        
 
-    class FavoriteSerializer(serializers.ModelSerializer):
-        validators = [
-            UniqueTogetherValidator(
-                queryset=Favorite.objects.all(),
-                fields=['user', 'recipe']
-            )
-        ]
+
+class FavoriteSerializer(serializers.ModelSerializer):
+    validators = [
+        UniqueTogetherValidator(
+            queryset=Favorite.objects.all(),
+            fields=['user', 'recipe']
+        )
+    ]
 
 
 class CartSerializer(serializers.ModelSerializer):
     validators = [
-            UniqueTogetherValidator(
-                queryset=Cart.objects.all(),
-                fields=['user', 'recipe']
-            )
-        ]
+        UniqueTogetherValidator(
+            queryset=Cart.objects.all(),
+            fields=['user', 'recipe']
+        )
+    ]
 
 
 class UnfollowSerializer(serializers.ModelSerializer):

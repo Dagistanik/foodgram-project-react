@@ -1,6 +1,10 @@
+from msilib.schema import Class
 from django.shortcuts import get_object_or_404
+from backend.api.models import Cart, Favorite
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+from rest_framework.validators import UniqueTogetherValidator
+
 
 from api.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
@@ -18,6 +22,12 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Ingredient.objects.all(),
+                fields=['name', 'measurement_unit']
+            )
+        ]
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
@@ -30,6 +40,12 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     class Meta:
         model = IngredientAmount
         fields = ('id', 'name', 'measurement_unit', 'amount')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=IngredientAmount.objects.all(),
+                fields=['ingredient', 'recipe']
+            )
+        ]
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -120,7 +136,8 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         instance.ingredients.clear()
         instance.tags.set(tags_data)
-        IngredientAmount.objects.filter(recipe=instance).delete()
+        # IngredientAmount.objects.filter(recipe=instance).delete()
+        instance.recipe.ingridients.delete()
         self.create_ingredients(ingredients_data, instance)
         return instance
 
@@ -202,6 +219,12 @@ class FollowSerializer(serializers.ModelSerializer):
             'recipes',
             'recipes_count',
         )
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Follow.objects.all(),
+                fields=['user', 'author']
+            )
+        ]
 
     def get_is_subscribed(self, obj):
         return Follow.objects.filter(user=obj.user, author=obj.author).exists()
@@ -209,10 +232,49 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
-        queryset = Recipe.objects.filter(author=obj.author)
+        queryset = obj.author.recipies
         if limit:
             queryset = queryset[: int(limit)]
         return CropRecipeSerializer(queryset, many=True).data
 
     def get_recipes_count(self, obj):
-        return Recipe.objects.filter(author=obj.author).count()
+        return obj.author.recipies.count()
+    
+    def validate(self, data):
+        author = self.initial_data.get('author')
+        user = self.context.get('request').user
+        if author == user:
+            raise serializers.ValidationError(
+                {'errors': 'Вы не можете отписываться от самого себя'}
+            )
+        
+
+    class FavoriteSerializer(serializers.ModelSerializer):
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Favorite.objects.all(),
+                fields=['user', 'recipe']
+            )
+        ]
+
+
+class CartSerializer(serializers.ModelSerializer):
+    validators = [
+            UniqueTogetherValidator(
+                queryset=Cart.objects.all(),
+                fields=['user', 'recipe']
+            )
+        ]
+
+
+class UnfollowSerializer(serializers.ModelSerializer):
+
+    def validate(self, data):
+        if not Follow.objects.filter(
+            author=data.get('author'),
+            user=data.get('user')
+        ).exists():
+            raise serializers.ValidationError(
+                {'author': 'Автор не в подписках.'}
+            )
+        return data

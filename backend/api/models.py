@@ -21,7 +21,8 @@ class Ingredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
         constraints = [
             models.UniqueConstraint(
-                fields=['name', 'measurement_unit'], name='unique ingredient'
+                fields=['name', 'measurement_unit'],
+                name='unique ingredient'
             )
         ]
 
@@ -104,6 +105,7 @@ class IngredientAmount(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         verbose_name='Рецепт',
+        related_name='ingridients'
     )
     amount = models.PositiveSmallIntegerField(
         validators=(
@@ -171,6 +173,7 @@ class Cart(models.Model):
         verbose_name_plural = 'Корзины'
         constraints = [
             models.UniqueConstraint(
-                fields=['user', 'recipe'], name='unique cart user'
+                fields=['user', 'recipe'],
+                name='unique cart user'
             )
         ]

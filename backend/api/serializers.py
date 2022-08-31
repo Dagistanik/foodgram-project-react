@@ -8,7 +8,7 @@ from api.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
 from users.serializers import CustomUserSerializer
 from foodgram.settings import ZERO
-from backend.api.models import Cart, Favorite
+from api.models import Cart, Favorite
 
 
 class TagSerializer(serializers.ModelSerializer):

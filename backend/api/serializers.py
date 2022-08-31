@@ -1,5 +1,4 @@
 from django.shortcuts import get_object_or_404
-from backend.api.models import Cart, Favorite
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
@@ -9,6 +8,7 @@ from api.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
 from users.serializers import CustomUserSerializer
 from foodgram.settings import ZERO
+from backend.api.models import Cart, Favorite
 
 
 class TagSerializer(serializers.ModelSerializer):

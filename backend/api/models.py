@@ -84,7 +84,7 @@ class Recipe(models.Model):
         validators=(
             validators.MinValueValidator(
                 MINIMUM_COOKING_TIME,
-                message=f'Минимальное время приготовления {MINIMUM_COOKING_TIME} минута'
+                message=f'Минимальное время {MINIMUM_COOKING_TIME} минута'
             ),
         ),
         verbose_name='Время приготовления',

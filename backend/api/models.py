@@ -129,7 +129,7 @@ class IngredientAmount(models.Model):
             models.UniqueConstraint(
                 fields=['ingredient', 'recipe'],
                 name='unique ingredients recipe'
-            )
+            ),
         )
 
     def __str__(self):
@@ -157,7 +157,7 @@ class Favorite(models.Model):
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
                 name='unique favorite recipe for user',
-            )
+            ),
         )
 
     def __str__(self):
@@ -186,7 +186,7 @@ class Cart(models.Model):
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
                 name='unique cart user'
-            )
+            ),
         )
 
     def __str__(self):

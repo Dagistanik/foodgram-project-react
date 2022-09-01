@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 
-from foodgram.settings import ONE
+from foodgram.settings import MINIMUM_COOKING_TIME, LEAST_AMOUNT_OF_INGREDIENT
 
 User = get_user_model()
 
@@ -19,12 +19,12 @@ class Ingredient(models.Model):
         ordering = ('-id',)
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=['name', 'measurement_unit'],
                 name='unique ingredient'
             )
-        ]
+        )
 
     def __str__(self):
         return self.name
@@ -83,7 +83,7 @@ class Recipe(models.Model):
     cooking_time = models.PositiveSmallIntegerField(
         validators=(
             validators.MinValueValidator(
-                ONE, message='Минимальное время приготовления 1 минута'
+                MINIMUM_COOKING_TIME, message=f'Минимальное время приготовления {MINIMUM_COOKING_TIME} минута'
             ),
         ),
         verbose_name='Время приготовления',
@@ -93,6 +93,9 @@ class Recipe(models.Model):
         ordering = ('-id',)
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
+
+    def __str__(self):
+        return self.name
 
 
 class IngredientAmount(models.Model):
@@ -110,7 +113,7 @@ class IngredientAmount(models.Model):
     amount = models.PositiveSmallIntegerField(
         validators=(
             validators.MinValueValidator(
-                ONE, message='Минимальное количество ингредиентов 1'
+                LEAST_AMOUNT_OF_INGREDIENT, message=f'Минимальное количество ингредиентов {LEAST_AMOUNT_OF_INGREDIENT}'
             ),
         ),
         verbose_name='Количество',
@@ -120,12 +123,15 @@ class IngredientAmount(models.Model):
         ordering = ('-id',)
         verbose_name = 'Количество ингредиента'
         verbose_name_plural = 'Количество ингредиентов'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=['ingredient', 'recipe'],
                 name='unique ingredients recipe'
             )
-        ]
+        )
+
+    def __str__(self):
+        return f'{self.ingredient.name}-{self.amount}'
 
 
 class Favorite(models.Model):
@@ -145,12 +151,15 @@ class Favorite(models.Model):
         ordering = ('-id',)
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
                 name='unique favorite recipe for user',
             )
-        ]
+        )
+
+    def __str__(self):
+        return f'{self.recipe.name} - {self.user.username}'
 
 
 class Cart(models.Model):
@@ -171,9 +180,12 @@ class Cart(models.Model):
         ordering = ('-id',)
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
                 fields=['user', 'recipe'],
                 name='unique cart user'
             )
-        ]
+        )
+
+    def __str__(self):
+        return f'{self.recipe.name} - {self.user.username}'

@@ -17,7 +17,7 @@ class CustomUserViewSet(UserViewSet):
     pagination_class = LimitPageNumberPagination
 
     @action(
-        detail=True, methods=['post'],
+        detail=True, methods=('post'),
         permission_classes=[IsAuthenticated]
     )
     def subscribe(self, request, id=None):
@@ -46,10 +46,6 @@ class CustomUserViewSet(UserViewSet):
     def del_subscribe(self, request, id=None):
         user = request.user
         author = get_object_or_404(User, id=id)
-        # if user == author:
-        #     return Response({
-        #         'errors': 'Вы не можете отписываться от самого себя'
-        #     }, status=status.HTTP_400_BAD_REQUEST)
         serializer = UnfollowSerializer(
             data={'author': author.id, 'user': request.user.id}
         )
@@ -58,7 +54,6 @@ class CustomUserViewSet(UserViewSet):
         if follow.exists():
             follow.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-
         return Response({
             'errors': 'Вы уже отписались'
         }, status=status.HTTP_400_BAD_REQUEST)

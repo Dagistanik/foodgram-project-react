@@ -20,12 +20,12 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
-        validators = [
+        validators = (
             UniqueTogetherValidator(
                 queryset=Ingredient.objects.all(),
                 fields=['name', 'measurement_unit']
             )
-        ]
+        )
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
@@ -38,12 +38,12 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
     class Meta:
         model = IngredientAmount
         fields = ('id', 'name', 'measurement_unit', 'amount')
-        validators = [
+        validators = (
             UniqueTogetherValidator(
                 queryset=IngredientAmount.objects.all(),
                 fields=['ingredient', 'recipe']
             )
-        ]
+        )
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -54,9 +54,9 @@ class RecipeSerializer(serializers.ModelSerializer):
         many=True,
     )
     is_favorited = serializers.SerializerMethodField(
-        method_name="get_is_favorited")
+        method_name='get_is_favorited')
     is_in_shopping_cart = serializers.SerializerMethodField(
-        method_name="get_is_in_shopping_cart")
+        method_name='get_is_in_shopping_cart')
 
     class Meta:
         model = Recipe
@@ -87,6 +87,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         ingredients = data.get('ingredientamount_set')
+        cooking_time = data.get('cooking_time')
         if not ingredients:
             raise serializers.ValidationError(
                 {'ingredients': 'нет ингредиентов'})
@@ -103,6 +104,10 @@ class RecipeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     {'ingredients': 'количества слишком мало '}
                 )
+        if cooking_time < ZERO:
+            raise serializers.ValidationError(
+                    {'cooking_time': 'время слишком мало '}
+            )
         return data
 
     def create_ingredients(self, ingredients, recipe):
@@ -134,7 +139,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance.tags.clear()
         instance.ingredients.clear()
         instance.tags.set(tags_data)
-        # IngredientAmount.objects.filter(recipe=instance).delete()
         instance.recipe.ingridients.delete()
         self.create_ingredients(ingredients_data, instance)
         return instance
@@ -151,9 +155,9 @@ class RecipeSerializerRead(serializers.ModelSerializer):
         many=True,
     )
     is_favorited = serializers.SerializerMethodField(
-        method_name="get_is_favorited")
+        method_name='get_is_favorited')
     is_in_shopping_cart = serializers.SerializerMethodField(
-        method_name="get_is_in_shopping_cart")
+        method_name='get_is_in_shopping_cart')
 
     class Meta:
         model = Recipe
@@ -194,10 +198,10 @@ class CropRecipeSerializer(serializers.ModelSerializer):
 
 class FollowSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField(
-        method_name="get_is_subscribed")
-    recipes = serializers.SerializerMethodField(method_name="get_recipes")
+        method_name='get_is_subscribed')
+    recipes = serializers.SerializerMethodField(method_name='get_recipes')
     recipes_count = serializers.SerializerMethodField(
-        method_name="get_recipes_count")
+        method_name='get_recipes_count')
 
     id = serializers.ReadOnlyField(source='author.id')
     email = serializers.ReadOnlyField(source='author.email')
@@ -217,12 +221,12 @@ class FollowSerializer(serializers.ModelSerializer):
             'recipes',
             'recipes_count',
         )
-        validators = [
+        validators = (
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
                 fields=['user', 'author']
             )
-        ]
+        )
 
     def get_is_subscribed(self, obj):
         return Follow.objects.filter(user=obj.user, author=obj.author).exists()
@@ -230,7 +234,7 @@ class FollowSerializer(serializers.ModelSerializer):
     def get_recipes(self, obj):
         request = self.context.get('request')
         limit = request.GET.get('recipes_limit')
-        queryset = obj.author.recipies
+        queryset = obj.author.recipies.all()
         if limit:
             queryset = queryset[: int(limit)]
         return CropRecipeSerializer(queryset, many=True).data
@@ -248,21 +252,21 @@ class FollowSerializer(serializers.ModelSerializer):
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
-    validators = [
+    validators = (
         UniqueTogetherValidator(
             queryset=Favorite.objects.all(),
             fields=['user', 'recipe']
         )
-    ]
+    )
 
 
 class CartSerializer(serializers.ModelSerializer):
-    validators = [
+    validators = (
         UniqueTogetherValidator(
             queryset=Cart.objects.all(),
             fields=['user', 'recipe']
         )
-    ]
+    )
 
 
 class UnfollowSerializer(serializers.ModelSerializer):

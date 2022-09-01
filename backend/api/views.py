@@ -51,7 +51,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True,
-        methods=['post', 'delete'],
+        methods=('post', 'delete'),
         permission_classes=[IsAuthenticated]
     )
     def shopping_cart(self, request, pk=None):
@@ -62,7 +62,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return None
 
     @action(
-        detail=False, methods=['get'], permission_classes=[IsAuthenticated]
+        detail=False, methods=('get'), permission_classes=[IsAuthenticated]
     )
     def download_for_shoping(self, request):
         ingredients = IngredientAmount.objects.filter(
@@ -80,7 +80,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 + f'{ing["amount_sum"]} {ing["unit"]}\n'
             )
         response = HttpResponse(
-            shop_list, content_type=CONTENT_TYPE
+            shop_list, content_type =CONTENT_TYPE
         )
 
         response['Content-Disposition'] = FILENAME
@@ -108,7 +108,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(
-        detail=True, methods=['post', 'delete'],
+        detail=True, methods=('post', 'delete'),
         permission_classes=[IsAuthenticated]
     )
     def favorite(self, request, pk=None):

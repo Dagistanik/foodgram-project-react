@@ -3,11 +3,13 @@ from pathlib import Path
 
 import environ
 
-ONE = 1
-
 ZERO = 0
 
 FILENAME = 'attachment; filename=shop_list.txt'
+
+MINIMUM_COOKING_TIME = 1
+
+LEAST_AMOUNT_OF_INGREDIENT = 1
 
 DEBUG = True
 
@@ -118,8 +120,8 @@ USE_TZ = True
 STATIC_URL = '/static_backend/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_backend')
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

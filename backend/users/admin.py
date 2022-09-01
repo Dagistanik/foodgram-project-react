@@ -5,7 +5,7 @@ from users.models import Follow
 
 class FollowAdmin(admin.ModelAdmin):
     list_display = ('user', 'author')
-    list_filter = ('user')
+    # list_filter = ('user')
     search_fields = ('user')
 
 

@@ -23,11 +23,11 @@ class Ingredient(models.Model):
             models.UniqueConstraint(
                 fields=['name', 'measurement_unit'],
                 name='unique ingredient'
-            )
+            ),
         )
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 
 class Tag(models.Model):
@@ -56,8 +56,8 @@ class Tag(models.Model):
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 
 class Recipe(models.Model):
@@ -84,7 +84,7 @@ class Recipe(models.Model):
         validators=(
             validators.MinValueValidator(
                 MINIMUM_COOKING_TIME,
-                message=f'Минимальное время {MINIMUM_COOKING_TIME} минута'
+                message=f'Минимальное время приготовления {MINIMUM_COOKING_TIME} минута'
             ),
         ),
         verbose_name='Время приготовления',
@@ -95,8 +95,8 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
 
 class IngredientAmount(models.Model):
@@ -132,8 +132,8 @@ class IngredientAmount(models.Model):
             )
         )
 
-    # def __str__(self):
-    #     return f'{self.ingredient.name}-{self.amount}'
+    def __str__(self):
+        return f'{self.ingredient.name}-{self.amount}'
 
 
 class Favorite(models.Model):
@@ -160,8 +160,8 @@ class Favorite(models.Model):
             )
         )
 
-    # def __str__(self):
-    #     return f'{self.recipe.name} - {self.user.username}'
+    def __str__(self):
+        return f'{self.recipe.name} - {self.user.username}'
 
 
 class Cart(models.Model):
@@ -189,5 +189,5 @@ class Cart(models.Model):
             )
         )
 
-    # def __str__(self):
-    #     return f'{self.recipe.name} - {self.user.username}'
+    def __str__(self):
+        return f'{self.recipe.name} - {self.user.username}'

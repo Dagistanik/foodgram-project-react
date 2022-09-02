@@ -23,8 +23,20 @@ class RecipeAdmin(admin.ModelAdmin):
         return obj.favorites.count()
 
 
+class CartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe')
+    list_filter = ('user')
+    search_fields = ('user')
+
+
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe')
+    list_filter = ('user')
+    search_fields = ('user')
+
+
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
-admin.site.register(Cart)
-admin.site.register(Favorite)
+admin.site.register(Cart, CartAdmin)
+admin.site.register(Favorite, FavoriteAdmin)

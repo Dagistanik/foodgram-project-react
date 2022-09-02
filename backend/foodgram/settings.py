@@ -3,13 +3,11 @@ from pathlib import Path
 
 import environ
 
-ZERO = 0
-
 FILENAME = 'attachment; filename=shop_list.txt'
 
 MINIMUM_COOKING_TIME = 1
 
-LEAST_AMOUNT_OF_INGREDIENT = 1
+LEAST_AMOUNT_INGREDIENT = 1
 
 DEBUG = True
 

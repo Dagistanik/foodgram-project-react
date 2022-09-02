@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core import validators
 from django.db import models
 
-from foodgram.settings import MINIMUM_COOKING_TIME, LEAST_AMOUNT_OF_INGREDIENT
+from foodgram.settings import MINIMUM_COOKING_TIME, LEAST_AMOUNT_INGREDIENT
 
 User = get_user_model()
 
@@ -114,8 +114,8 @@ class IngredientAmount(models.Model):
     amount = models.PositiveSmallIntegerField(
         validators=(
             validators.MinValueValidator(
-                LEAST_AMOUNT_OF_INGREDIENT,
-                message=f'Минимум ингредиентов {LEAST_AMOUNT_OF_INGREDIENT}'
+                LEAST_AMOUNT_INGREDIENT,
+                message=f'Минимум ингредиентов {LEAST_AMOUNT_INGREDIENT}'
             ),
         ),
         verbose_name='Количество',

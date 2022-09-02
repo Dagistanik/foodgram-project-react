@@ -6,7 +6,7 @@ from rest_framework.validators import UniqueTogetherValidator
 from api.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
 from users.serializers import CustomUserSerializer
-from foodgram.settings import ZERO
+from foodgram.settings import MINIMUM_COOKING_TIME, LEAST_AMOUNT_INGREDIENT
 from api.models import Cart, Favorite
 
 
@@ -23,7 +23,7 @@ class IngredientSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=Ingredient.objects.all(),
-                fields=['name', 'measurement_unit']
+                fields=('name', 'measurement_unit')
             )
         )
 
@@ -41,7 +41,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=IngredientAmount.objects.all(),
-                fields=['ingredient', 'recipe']
+                fields=('ingredient', 'recipe')
             )
         )
 
@@ -100,11 +100,11 @@ class RecipeSerializer(serializers.ModelSerializer):
                     {'ingredients': 'Ингредиент уже добавлен'}
                 )
             ingredient_list.append(ingredient)
-            if int(ingredient_item.get('amount')) <= ZERO:
+            if int(ingredient_item.get('amount')) <= LEAST_AMOUNT_INGREDIENT:
                 raise serializers.ValidationError(
                     {'ingredients': 'количества слишком мало '}
                 )
-        if cooking_time < ZERO:
+        if cooking_time < MINIMUM_COOKING_TIME:
             raise serializers.ValidationError(
                 {'cooking_time': 'время слишком мало '}
             )
@@ -224,7 +224,7 @@ class FollowSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
-                fields=['user', 'author']
+                fields=('user', 'author')
             )
         )
 
@@ -255,7 +255,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
     validators = (
         UniqueTogetherValidator(
             queryset=Favorite.objects.all(),
-            fields=['user', 'recipe']
+            fields=('user', 'recipe')
         )
     )
 
@@ -264,7 +264,7 @@ class CartSerializer(serializers.ModelSerializer):
     validators = (
         UniqueTogetherValidator(
             queryset=Cart.objects.all(),
-            fields=['user', 'recipe']
+            fields=('user', 'recipe')
         )
     )
 

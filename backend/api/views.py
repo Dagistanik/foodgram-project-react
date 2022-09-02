@@ -39,7 +39,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = LimitPageNumberPagination
     filter_class = TagAuthorFilter
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = (IsOwnerOrReadOnly,)
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -52,7 +52,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(
         detail=True,
         methods=('post', 'delete'),
-        permission_classes=[IsAuthenticated]
+        permission_classes=(IsAuthenticated)
     )
     def shopping_cart(self, request, pk=None):
         if request.method == 'POST':
@@ -62,7 +62,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         return None
 
     @action(
-        detail=False, methods=('get'), permission_classes=[IsAuthenticated]
+        detail=False, methods=('get'), permission_classes=(IsAuthenticated)
     )
     def download_for_shoping(self, request):
         ingredients = IngredientAmount.objects.filter(
@@ -109,7 +109,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=True, methods=('post', 'delete'),
-        permission_classes=[IsAuthenticated]
+        permission_classes=(IsAuthenticated)
     )
     def favorite(self, request, pk=None):
         if request.method == 'DELETE':

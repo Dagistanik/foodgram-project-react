@@ -5,7 +5,7 @@ from api.models import Cart, Favorite, Ingredient, Recipe, Tag
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug', 'color')
-    search_fields = ('name')
+    search_fields = ('name',)
 
 
 class IngredientAdmin(admin.ModelAdmin):
@@ -17,8 +17,8 @@ class IngredientAdmin(admin.ModelAdmin):
 class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'author', 'count_favorites')
     list_filter = ('author', 'name', 'tags')
-    # search_fields = ('name', 'author', 'count_favorites')
-    search_fields = ('name')
+    search_fields = ('name', 'author', 'count_favorites')
+    # search_fields = ('name')
 
     def count_favorites(self, obj):
         return obj.favorites.count()

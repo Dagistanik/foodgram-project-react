@@ -23,8 +23,8 @@ class IngredientSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=Ingredient.objects.all(),
-                fields=('name', 'measurement_unit'),
-            )
+                fields=('name', 'measurement_unit')
+            ),
         )
 
 
@@ -41,8 +41,8 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=IngredientAmount.objects.all(),
-                fields=('ingredient', 'recipe'),
-            )
+                fields=('ingredient', 'recipe')
+            ),
         )
 
 
@@ -224,8 +224,8 @@ class FollowSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=Follow.objects.all(),
-                fields=('user', 'author'),
-            )
+                fields=('user', 'author')
+            ),
         )
 
     def get_is_subscribed(self, obj):
@@ -255,8 +255,8 @@ class FavoriteSerializer(serializers.ModelSerializer):
     validators = (
         UniqueTogetherValidator(
             queryset=Favorite.objects.all(),
-            fields=('user', 'recipe'),
-        )
+            fields=('user', 'recipe')
+        ),
     )
 
 
@@ -264,8 +264,8 @@ class CartSerializer(serializers.ModelSerializer):
     validators = (
         UniqueTogetherValidator(
             queryset=Cart.objects.all(),
-            fields=('user', 'recipe'),
-        )
+            fields=('user', 'recipe')
+        ),
     )
 
 

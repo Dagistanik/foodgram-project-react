@@ -58,17 +58,17 @@ sudo chmod +x /usr/local/bin/docker-compose
     sudo docker-compose exec backend python manage.py createsuperuser
                                                                           
 ### Адрес документации
-  http://158.160.5.77//api/docs/     
+  http://158.160.5.77/api/docs/     
   
 ### адрес в интернете
 
-  Проект запущен по адресу http://158.160.5.77//
+  Проект запущен по адресу http:/158.160.5.77//
 
 Логин-пароль админа
 
 root
-otnichenko.danik@yandex.ru
-0950
+sotnichenko.danik@yandex.ru
+
 
 Автор проекта: Сотниченко Даниил. sotnichenko.danik@mail.ru
 

@@ -26,7 +26,7 @@ class RecipeAdmin(admin.ModelAdmin):
 class CartAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
     list_filter = ('user',)
-    search_fields = ('user',)
+    search_fields = ('user', 'recipie__tag')
 
 
 class FavoriteAdmin(admin.ModelAdmin):

@@ -1,13 +1,12 @@
+from api.models import (Cart, Favorite, Ingredient, IngredientAmount, Recipe,
+                        Tag)
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
+from foodgram.settings import LEAST_AMOUNT_INGREDIENT, MINIMUM_COOKING_TIME
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
-
-from api.models import Ingredient, IngredientAmount, Recipe, Tag
 from users.models import Follow
 from users.serializers import CustomUserSerializer
-from foodgram.settings import MINIMUM_COOKING_TIME, LEAST_AMOUNT_INGREDIENT
-from api.models import Cart, Favorite
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -41,7 +40,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=IngredientAmount.objects.all(),
-                fields=('ingredient', 'recipe')
+                fields=('ingreidient', 'recipe')
             ),
         )
 

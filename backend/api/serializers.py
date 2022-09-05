@@ -40,7 +40,7 @@ class IngredientAmountSerializer(serializers.ModelSerializer):
         validators = (
             UniqueTogetherValidator(
                 queryset=IngredientAmount.objects.all(),
-                fields=('ingredient', 'recipe')
+                fields=('ingridients', 'recipe')
             ),
         )
 

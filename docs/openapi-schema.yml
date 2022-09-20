@@ -217,7 +217,7 @@ paths:
           $ref: '#/components/responses/NotFound'
       tags:
         - Рецепты
-  /api/recipes/download_for_shoping/:
+  /api/recipes/download_shopping_cart/:
     get:
       security:
         - Token: [ ]
@@ -605,7 +605,7 @@ paths:
           in: query
           description: Поиск по частичному вхождению в начале названия ингредиента.
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           content:
@@ -627,7 +627,7 @@ paths:
           required: true
           description: ''
           schema:
-            type: integer
+            type: string
       responses:
         '200':
           content:

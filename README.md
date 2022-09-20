@@ -1,75 +1,97 @@
-# Foodgram
+# Проект Foodgram
+![foodgram_workflow](https://github.com/SaPer663/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)  
+  
+[![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/-Django-464646?style=flat-square&logo=Django)](https://www.djangoproject.com/)
+[![Django REST Framework](https://img.shields.io/badge/-Django%20REST%20Framework-464646?style=flat-square&logo=Django%20REST%20Framework)](https://www.django-rest-framework.org/)
+[![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-464646?style=flat-square&logo=PostgreSQL)](https://www.postgresql.org/)
+[![Nginx](https://img.shields.io/badge/-NGINX-464646?style=flat-square&logo=NGINX)](https://nginx.org/ru/)
+[![gunicorn](https://img.shields.io/badge/-gunicorn-464646?style=flat-square&logo=gunicorn)](https://gunicorn.org/)
+[![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
+[![poetry](https://img.shields.io/badge/-poetry-464646?style=flat-square&logo=poetry)](https://github.com/python-poetry/poetry)
+[![GitHub%20Actions](https://img.shields.io/badge/-GitHub%20Actions-464646?style=flat-square&logo=GitHub%20actions)](https://github.com/features/actions)
+[![Yandex.Cloud](https://img.shields.io/badge/-Yandex.Cloud-464646?style=flat-square&logo=Yandex.Cloud)](https://cloud.yandex.ru/)
 
-![Foodgram workflow](https://github.com/PVchuchkov/foodgram-project-react/actions/workflows/main.yml/badge.svg)  
+
+Foodgram(«Продуктовый помощник») - это онлайн-сервис и API для него. На этом
+сервисе пользователи смогут публиковать рецепты, подписываться на публикации
+других пользователей, добавлять понравившиеся рецепты в список «Избранное»,
+а перед походом в магазин скачивать сводный список продуктов, необходимых для
+приготовления одного или нескольких выбранных блюд.
 
 
-# Foodgram
-Foodgram  - проект для публикации рецептов. Авторизованные пользователи
-могут подписываться на понравившихся авторов, добавлять рецепты в избранное,
-в покупки, скачать список покупок ингредиентов для добавленных в покупки
-рецептов.
+## Подготовка и запуск проекта
+### Склонировать репозиторий на локальную машину:
+```
+git clone https://github.com/SaPer663/foodgram-project-react.git
+```
+### На удаленном сервере:
 
-## Запуск проекта
-* Установите docker на сервер:
-sudo apt install docker.io 
-* Установите docker-compose на сервер:
+- скопируйте файлы docker-compose.yml, docker-compose.prod.yml и nginx.conf
+из директории infra на сервер;
 
-sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
+- в директории `infra/` создайте `.env` на основе `.env.template`
+```
+DB_ENGINE - указать СУБД 
+DB_NAME - имя базы данных
+POSTGRES_USER - логин пользователя базы данных PostgreSQL
+POSTGRES_PASSWORD - пароль пользователя базы данных PostgreSQL
+DB_HOST - IP адрес сервера базы данных PostgreSQL
+DB_PORT - порт сервера базы данных PostgreSQL
 
-* Отредактируйте файл infra/nginx.conf и в строке server_name впишите свой IP
-* Скопируйте файлы docker-compose.yml и nginx.conf из директории infra на сервер:
+DJANGO_SECRET_KEY - секретный ключ
+DJANGO_DEBUG - режим работы сервера
+```
+- для развёртывания с `github action` добавьте в Secrets GitHub переменные
+окружения:
 
-* впишитеи в .env файл ни сервере или в в secrets проэкта на github 
-в случае workflow:
+```
+DB_ENGINE=<django.db.backends.postgresql>
+DB_NAME=<имя базы данных postgres>
+DB_USER=<пользователь бд>
+DB_PASSWORD=<пароль>
+DB_HOST=<db>
+DB_PORT=<5432>
+
+DOCKER_PASSWORD=<пароль от DockerHub>
+DOCKER_USERNAME=<имя пользователя>
+
+SECRET_KEY=<секретный ключ проекта django>
+USER=<username для подключения к серверу>
+HOST=<IP сервера>
+SSH_KEY=< SSH ключ
+TELEGRAM_TO=<ID чата, в который придет сообщение>
+TELEGRAM_TOKEN=<токен вашего бота>
+``` 
+  
+- на сервере запустите контейнеры через docker-compose:
+```
+sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+```
+- только при первом развёртывании проекта на сервере:
+    - соберите статические файлы:
     ```
-    DB_ENGINE=<django.db.backends.postgresql>
-    DB_NAME=<имя базы данных postgres>
-    DB_USER=<пользователь бд>
-    DB_PASSWORD=<пароль>
-    DB_HOST=<db>
-    DB_PORT=<5432>
-    SECRET_KEY=<секретный ключ проекта django>
-    
-    DOCKER_PASSWORD=<пароль от DockerHub>
-    DOCKER_USERNAME=<имя пользователя от DockerHub>
-    
-    SECRET_KEY=<секретный ключ проекта django>
-    
-    HOST=<IP сервера>
-    USER=<username для сервера>
-    SSH_KEY=<ваш SSH ключ сервера>
-    
-    PASSPHRASE=<пароль для ключа, если он установлен>
-    
-    TELEGRAM_TO=<ID чата>
-    TELEGRAM_TOKEN=<токен вашего бота>
-  
+    sudo docker-compose exec web python manage.py collectstatic --noinput
+    ```
+    - примените миграции:
+    ```
+    sudo docker-compose exec web python manage.py migrate --noinput
+    ```
+    - загрузите ингридиенты  в базу данных (необязательно):  
 
-* После успешной сборки на сервере выполните команды (только после первого деплоя):
-    
-    - Выполните миграции:
-    sudo docker-compose exec backend python manage.py migrate
-    
-    - Соберите статику:
-    sudo docker-compose exec backend python manage.py collectstatic
-    
-    - Создать суперпользователя:
-    sudo docker-compose exec backend python manage.py createsuperuser
-                                                                          
-### Адрес документации
-  http://158.160.5.77/api/docs/     
-  
-### адрес в интернете
-
-  Проект запущен по адресу http:/158.160.5.77//
-
-Логин-пароль админа
-
-root
-sotnichenko.danik@yandex.ru
+    ```
+    sudo docker-compose exec web python manage.py filling -a `приложение` -m `Модель` -f файл из директории static/data `.csv`
+    ```
+    - cоздать суперпользователя Django:
+    ```
+    sudo docker-compose exec web python manage.py createsuperuser
+    ```
+### Документация
+После запуска сервера документация API доступна по адресу:
+- [swagger](http://foodgram.saper663.ru/api/swagger/)
+- [redoc](http://foodgram.saper663.ru/api/docs/)
 
 
-Автор проекта: Сотниченко Даниил. sotnichenko.danik@mail.ru
-
+### Автор
+Александр
 

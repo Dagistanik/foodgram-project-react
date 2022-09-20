@@ -47,7 +47,7 @@ jobs:
             DJANGO_ENV=production
           file: ./backend/foodgram/docker/Dockerfile
           push: true
-          tags: saper663/foodgram:latest
+          tags: dagistanik/foodgram:latest
   
   deploy:
     if: github.ref == 'refs/heads/master'
@@ -65,7 +65,7 @@ jobs:
             cd ~/foodgram
             sudo docker-compose stop
             sudo docker-compose rm -f web
-            sudo docker pull saper663/foodgram
+            sudo docker pull dagistanik/foodgram
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
             echo DB_NAME=${{ secrets.DB_NAME }} >> .env

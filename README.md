@@ -23,7 +23,7 @@ Foodgram(«Продуктовый помощник») - это онлайн-се
 ## Подготовка и запуск проекта
 ### Склонировать репозиторий на локальную машину:
 ```
-git clone https://github.com/SaPer663/foodgram-project-react.git
+git clone https://github.com/Dagistanik/foodgram-project-react.git
 ```
 ### На удаленном сервере:
 

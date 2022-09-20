@@ -2,7 +2,7 @@ version: '3.8'
 services:
 
   web:
-    image: saper663/foodgram:latest
+    image: dagistanik/foodgram:latest
     
     restart: always
     depends_on:

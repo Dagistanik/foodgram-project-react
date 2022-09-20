@@ -62,7 +62,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
   
         script: |
-            cd ~/foodgram
+            # cd ~/foodgram
             sudo docker-compose stop
             sudo docker-compose rm -f web
             sudo docker pull dagistanik/foodgram

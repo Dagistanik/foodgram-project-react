@@ -73,7 +73,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env
+            echo ECRET_KEY=${{ secrets.SECRET_KEY }} >> .env
             echo DOMAIN_NAME=${{ secrets.DOMAIN_NAME }} >> .env
             echo DJANGO_ALLOWED_HOST=${{ secrets.DJANGO_ALLOWED_HOST }} >> .env
             sudo docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d

@@ -20,7 +20,7 @@ services:
         - django-media:/code/media
   
   frontend:
-    image: dagistanik/foodgram_frontend:latest
+    image: dagistanik/foodgram_front:latest
 
   
   nginx:
